@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Timer Practice5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .background {
+            height: 100vh;
+            background-image: url(images/mountain.jpg);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            text-align: center;
+            padding-top: 230px;
+            font-size: 2rem;
+        }
+
+        .settings {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            bottom: 15px;
+            right: 10px;
+            gap: .5rem;
+        }
+
+        .settings .fa-cog {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .settings input {
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .settings button {
+            background-color: green;
+            border: none;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .time-container {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            text-align: center;
+
+        }
+
+
+        .time-container div {
+            color: white;
+        }
+
+        .time-container h2 {
+            font-size: 2.5rem;
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/8a073aab63.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div class="background">
+        <div id="initialText" class="container">
+            <h2>Kindly Enter Your Date Of Birth</h2>
+        </div>
+
+        <div class="center">
+            <div id="afterDOBButton" class="container">
+                <div class="center">
+                    <h2>How much life have you covered till now</h2>
+                    <div class="time-container">
+
+                        <h2>
+                            <div id="year">0</div>
+                            Year
+                        </h2>
+                        <h2>
+                            <div id="month">0</div>
+                            Month
+                        </h2>
+                        <h2>
+                            <div id="day">0</div>
+                            Day
+                        </h2>
+                        <h2>
+                            <div id="hour">0</div>
+                            Hour
+                        </h2>
+                        <h2>
+                            <div id="minute">0</div>
+                            Minute
+                        </h2>
+                        <h2>
+                            <div id="second">0</div>
+                            Second
+                        </h2>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings">
+            <i id="settingsIcon" class="fa fa-cog"></i>
+            <div id="settingsContent" class="settings-content hide">
+                <input type="date" id="DOBInput">
+                <button type="submit" id="DOBButton">ADD DOB</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        let isDOBOpen = false;
+        let DateOfBirth;
+        const settingsIconEl = document.getElementById("settingsIcon");
+        const settingsContentEl = document.getElementById("settingsContent");
+        const initialTextEl = document.getElementById("initialText");
+        const afterDOBButtonEl = document.getElementById("afterDOBButton");
+        const DOBButtonEl = document.getElementById("DOBButton");
+        const DOBInputEl = document.getElementById("DOBInput");
+        const yearEl = document.getElementById("year");
+        const monthEl = document.getElementById("month");
+        const dayEl = document.getElementById("day");
+        const hourEl = document.getElementById("hour");
+        const minuteEl = document.getElementById("minute");
+        const secondEl = document.getElementById("second");
+
+
+        const toggleDateOfBirthSelector = () => {
+
+            if (isDOBOpen) {
+                settingsContentEl.classList.add("hide");
+            }
+            else {
+                settingsContentEl.classList.remove("hide");
+            }
+
+            isDOBOpen = !isDOBOpen;
+            console.log("toggle", isDOBOpen);
+
+        };
+        const updateAge = () => {
+
+            const currentDate = new Date();
+            const dateDiff = currentDate - DateOfBirth;
+            const year = Math.floor(dateDiff / (1000 * 60 * 60 * 24 * 365));
+            const month = Math.floor((dateDiff / (1000 * 60 * 60 * 24 * 365)) % 12);
+            const day = Math.floor((dateDiff / (1000 * 60 * 60 * 24)) % 30);
+            const hour = Math.floor((dateDiff / (1000 * 60 * 60)) % 24);
+            const minute = Math.floor((dateDiff / (1000 * 60)) % 60);
+            const second = Math.floor((dateDiff / (1000)) % 60);
+
+            yearEl.innerHTML = makeTwoDigitNumber(year);
+            monthEl.innerHTML = makeTwoDigitNumber(month);
+            dayEl.innerHTML = makeTwoDigitNumber(day);
+            hourEl.innerHTML = makeTwoDigitNumber(hour);
+            minuteEl.innerHTML = makeTwoDigitNumber(minute);
+            secondEl.innerHTML = makeTwoDigitNumber(second);
+        };
+
+        const makeTwoDigitNumber = (number) =>{
+                return number > 9 ? number : `0${number}`
+            }
+
+         
+
+        const setDOBHandler = () => {
+            const dateString = DOBInputEl.value;
+            DateOfBirth = dateString ? new Date(dateString) : null ;
+            setInterval(()=> updateAge(), 1000);
+
+
+            if (DateOfBirth) {
+                initialTextEl.classList.add("hide");
+                afterDOBButtonEl.classList.remove("hide");
+                
+                
+                
+
+            }
+            else {
+                afterDOBButtonEl.classList.add("hide");
+                initialTextEl.classList.remove("hide");
+            }
+
+        }
+
+        setDOBHandler();
+
+
+        settingsIconEl.addEventListener("click", toggleDateOfBirthSelector);
+        DOBButtonEl.addEventListener("click", setDOBHandler);
+
+
+    </script>
+</body>
+
+</html>
